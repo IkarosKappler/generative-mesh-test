@@ -18,13 +18,11 @@
 
   <body> 
     <h3>Generative Mesh Test I</h3>
-    
+    Drag around the polygon corners.<br/>
+    <br/>
     <div id="left">
-      <!--
-      <div class="label">Iterations:</div> <input type="number" id="iterations" value="8" step="1" min="0" /><br/>
-      <div class="label">Cell Size:</div> <input type="number" id="cell_size" value="5" step="1" min="1" /><br/>
-      <div class="label">Line Width:</div> <input type="number" id="line_width" value="2" step="1" min="1" /><br/>
--->
+      <div class="label">Number of Nodes:</div> <input type="number" id="node_count" value="7" step="1" min="3" />
+      <button type="button" id="reload">Reload</button><br/>
     </div>
     <div id="right">
       Stats<br/>
@@ -33,7 +31,6 @@
 
     <canvas id="my_canvas" width="640" height="640"></canvas><br/>
     <div id="debug"></div>
-
  
   </body>
 </html>

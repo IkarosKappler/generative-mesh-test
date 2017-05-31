@@ -33,16 +33,21 @@ $( document ).ready( function() {
     };
     
     // Make n random points
-    var n = 5+irand(5);
-    var graph         = new Graph( [], { directed : false } );
-    for( var i = 0; i < n; i++ ) {
-	//graph.points().push( randomPoint() );
-	var p = circlePoint( canvas_width/3, Math.PI*2*(i/n) );
-	var jitter = randomPoint( (canvas_width-canvas_width/2)/3, (canvas_height-canvas_height/2)/3  );
-	p.add( jitter );
-	graph.points().push( p );
-	if( i > 0 ) graph.connect(i-1,i);
-	if( i+1 >= n ) graph.connect(i,0);
+    var n             = getIntegerInput('node_count'); // 5+irand(5);
+    var graph         = null;
+
+    var rebuild = function() {
+	graph = new Graph( [], { directed : false } );
+	for( var i = 0; i < n; i++ ) {
+	    //graph.points().push( randomPoint() );
+	    var p = circlePoint( canvas_width/3, Math.PI*2*(i/n) );
+	    var jitter = randomPoint( (canvas_width-canvas_width/2)/3, (canvas_height-canvas_height/2)/3  );
+	    p.add( jitter );
+	    graph.points().push( p );
+	    if( i > 0 ) graph.connect(i-1,i);
+	    if( i+1 >= n ) graph.connect(i,0);
+	}
+	draw( ctx );
     }
 
     var locateGraphPointAt = function(pos, tolerance) {
@@ -98,11 +103,11 @@ $( document ).ready( function() {
 	
     }
 
-    draw(ctx);
+    rebuild();
+    //draw(ctx);
 
-    $( 'input#iterations' ).change( draw );
-    $( 'input#cell_size' ).change( draw );
-    $( 'input#line_width' ).change( draw );
+    $( 'input#node_count' ).change( rebuild );
+    $( 'button#reload' ).click( rebuild );
 
     var canvasPosition2Complex = function(event) {
 	var rect = $canvas[0].getBoundingClientRect();
@@ -149,7 +154,7 @@ $( document ).ready( function() {
 
 	var diff = mouseDownPosition.clone().sub( z );
 	if( draggedPoint ) {
-	    console.log( 'move difference: ' + diff );
+	    // console.log( 'move difference: ' + diff );
 	    draggedPoint.sub( diff );
 	}
 	mouseDownPosition = z;
