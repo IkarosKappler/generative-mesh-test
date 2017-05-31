@@ -16,7 +16,7 @@ var Graph = (function() {
     // The second param contains the settings (such as undirected).
     var constructor = function( pointList, options ) {
 
-	options = options | {};
+	options = options || {};
 	
 	// A two-dimensional object { a : { b : true|false, ... }, ... }
 	var relation =  {};
@@ -37,14 +37,14 @@ var Graph = (function() {
 	};
 
 	var getConnected = function(a,b,undirected) {
-	    if( !(a in relation) )
-		return false;
-	    if( !(b in relation[a]) )
-		return false;
-	    if( !relation[a][b] && undirected )
-		return getConnected(b,a,false);
-	    else
+	    if( !(a in relation) || !(b in relation[a]) || !relation[a][b] ) {
+		if( undirected )
+		    return getConnected(b,a,false);
+		else
+		    return false;
+	    } else {
 		return relation[a][b];
+	    }
 	};
 	
 	var _export = this;
