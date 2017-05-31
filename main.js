@@ -37,6 +37,7 @@ $( document ).ready( function() {
     var graph         = null;
 
     var rebuild = function() {
+	n             = getIntegerInput('node_count'); // 5+irand(5);
 	graph = new Graph( [], { directed : false } );
 	for( var i = 0; i < n; i++ ) {
 	    //graph.points().push( randomPoint() );
