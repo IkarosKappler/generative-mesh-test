@@ -1,0 +1,143 @@
+/**
+ * @author   Ikaros Kappler
+ * @date     2017-05-18
+ * @version  1.0.0
+ **/
+
+$( document ).ready( function() {
+
+    var $canvas = $( 'canvas#my_canvas' );
+    var ctx = $canvas[0].getContext('2d');
+
+    var canvas_width = 820;
+    var canvas_height = 540;
+    
+    var n = 7;
+    var sc = 7.0;
+    var hsh = 34; // canvas_width/4;
+    var vsh = 42; // canvas_height/2;
+    var color = 'green';
+    var line_width = 2;
+    
+    var draw = function() {
+	//n = getIntegerInput('iterations');
+	sc = getFloatInput('cell_size');
+	line_width = getFloatInput('line_width');
+	draw_dragon(ctx);
+    };
+    
+    function draw_dragon(ctx) {
+	// Plotting Dragon curves. 2/25/17 aev
+	/*
+	var n=document.getElementById('ord').value;
+	var sc=document.getElementById('sci').value;
+	var hsh=document.getElementById('hshi').value;
+	var vsh=document.getElementById('vshi').value;
+	var clr=document.getElementById('cli').value;
+	*/
+	n =  getIntegerInput('iterations');
+	console.log( 'n=' + n + ', sc='+sc + ', vsh=' + vsh + ', hsh=' + hsh );
+	var c=c1=c2=c2x=c2y=x=y=0, d=1, n=Math.pow(2,n); //1<<n;
+	//var cvs=document.getElementById(cId);
+	//var ctx=cvs.getContext("2d");
+	hsh=Number(hsh); vsh=Number(vsh);
+	x=hsh; // canvas_width/2;
+	y=vsh; //canvas_height/2; //cvs.width/2;
+	// Cleaning canvas, init plotting
+	ctx.fillStyle='black';
+	ctx.fillRect(0,0,canvas_width,canvas_height);
+	//ctx.beginPath();
+	var old_x = x, old_y = y;
+	for(i=0; i<=n; ) {
+	    //ctx.lineTo((x+hsh)*sc,(y+vsh)*sc);
+	    ctx.beginPath();
+	    ctx.moveTo( hsh + old_x*sc, vsh + old_y*sc );
+	    ctx.lineTo( hsh + x*sc,     vsh + y*sc );
+	    ctx.strokeStyle = colors[ mrand_i(colors.length+2) ];
+	    ctx.lineWidth = line_width;
+	    ctx.lineCap = 'round';
+	    ctx.stroke();
+	    c1=c&1; c2=c&2;
+	    c2x=1*d;
+	    if(c2>0) 
+		c2x=(-1)*d
+	    
+	    c2y=(-1)*c2x;
+
+	    old_x = x;
+	    old_y = y;
+	    
+	    if(c1>0) y+=c2y
+	    else     x+=c2x
+	    
+	    i++;
+	    c+=i/(i&-i);
+	}
+	//ctx.strokeStyle = colors[ mrand_i(colors.length) ];
+	//ctx.stroke();
+    }
+
+    
+    // var colors = [ 'red', 'orange', 'blue', 'dark_grey' ];
+    var colors = [ '#00ff00', '#00a800', '#006800', '#00a8a8' ];
+    
+    var paint = function(ctx) {
+        c_curve(x, y, len, alpha_angle, iteration_n, ctx);
+    };
+
+    var mrand_i = function(max) {
+	return Math.floor( Math.random()*max );
+    };
+
+    draw();
+
+    $( 'input#iterations' ).change( draw );
+    $( 'input#cell_size' ).change( draw );
+    $( 'input#line_width' ).change( draw );
+
+    var canvasPosition2Complex = function(event) {
+	var rect = $canvas[0].getBoundingClientRect();
+        var x = event.clientX - rect.left,
+	    y = event.clientY - rect.top;
+
+	return { x : x, y : y }; // new Complex( (x-offset.x)/scale.x, (y-offset.y)/scale.y );
+    };
+
+    var mouseDown = false;
+    var mouseDownPosition = null;
+    $canvas.mousedown( function(event) {
+	mouseDown = true;
+	mouseDownPosition = canvasPosition2Complex(event);
+	//$( 'input#z'+activePointIndex+'-re' ).val( z.re() );
+	//$( 'input#z'+activePointIndex+'-im' ).val( z.im() );
+	draw();
+    } );
+    $canvas.mouseup( function(event) {
+	mouseDown = false;
+	mouseDownPosition = null;
+    } );
+    $canvas.mousemove( function(event) {
+	if( !mouseDown )
+	    return;
+	var z = canvasPosition2Complex(event);
+	//$( 'input#z'+activePointIndex+'-re' ).val( z.re() );
+	//$( 'input#z'+activePointIndex+'-im' ).val( z.im() );
+
+	vsh += (z.y - mouseDownPosition.y);
+	hsh += (z.x - mouseDownPosition.x);
+	mouseDownPosition = z;
+	
+	draw();
+    } );
+   
+} );
+
+
+var getFloatInput = function(id) {
+    return parseFloat( document.getElementById(id).value );
+}
+
+var getIntegerInput = function(id) {
+    return parseInt( document.getElementById(id).value );
+}
+

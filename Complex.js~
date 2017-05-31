@@ -1,0 +1,59 @@
+/**
+ * A complex math class in rectangular coordinates.
+ *
+ * @author  Ikaros Kappler
+ * @date    2017-05-03
+ * @version 1.0.0
+ **/
+
+var Complex = (function() {
+
+    var constructor = function( re, im ) {
+	
+	this.re = function() { return re; };
+	this.im = function() { return im; };
+
+	this.clone = function() {
+	    return new Complex(re,im);
+	};
+	this.conjugate = function(c) {
+	    im = -im;
+	    return this;
+	};
+	this.add = function(c) {
+	    re += c.re();
+	    im += c.im();
+	    return this;
+	};
+	this.sub = function(c) {
+	    re -= c.re();
+	    im -= c.im();
+	    return this;
+	};
+	this.mul = function(c) {
+	    re = re*c.re() - im*c.im();
+	    im = im*c.re() + re*c.im();
+	    return this;
+	};
+	this.sub = function(c) {
+	    re = (re*c.re() - im*c.im()) / (c.re()*c.re() + c.im()*c.im());
+	    im = (im*c.re() + re*c.im()) / (c.re()*c.re() + c.im()*c.im());
+	    return this;
+	};
+	this.sqrt = function() {
+	    // Huh?
+	};
+	this.toString = function() {
+	    return '' + re + ' + i*' + im;
+	};
+    };
+
+    return constructor;
+})();
+
+
+// TEST
+if( false ) {
+    var z = new Complex(3,4);
+    console.log( 'test: ' + z.re() );
+}

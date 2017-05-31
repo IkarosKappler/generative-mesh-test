@@ -1,0 +1,19 @@
+/**
+ * A simple graph class.
+ *
+ * @author  Ikaros Kappler
+ * @date    2017-05-30
+ * @version 1.0.0
+ **/
+
+var Graph = (function() {
+
+    var constructor = function( pointList ) {
+
+	var export = this;
+	
+    };
+
+    return constructor;
+
+} )();
